@@ -333,14 +333,14 @@ def _check_staff_year(page, staff_year):
                 .trim()
                 .toLowerCase()
                 .replace(/[–—]/g, "-")
-                .replace(/\s+/g, " ");
+                .replace(/\\s+/g, " ");
 
             function normalize(text) {
                 return (text || "")
                     .trim()
                     .toLowerCase()
                     .replace(/[–—]/g, "-")
-                    .replace(/\s+/g, " ");
+                    .replace(/\\s+/g, " ");
             }
 
             function getBoxText(box) {
@@ -387,8 +387,6 @@ def _check_staff_year(page, staff_year):
 
             staffBox.scrollIntoView({ block: "center" });
 
-            // Important: the Staff Years list has its own little scrollbar.
-            // Scroll every internal scrollable container so hidden bottom years are reachable.
             const scrollables = Array.from(staffBox.querySelectorAll("*")).filter(el => {
                 return el.scrollHeight > el.clientHeight;
             });
@@ -413,7 +411,6 @@ def _check_staff_year(page, staff_year):
             }
 
             if (!target) {
-                // Try one more time after forcing scroll to the bottom.
                 const inside = staffBox.querySelector(".inside");
                 const lists = Array.from(staffBox.querySelectorAll("ul, div"));
 
@@ -443,7 +440,6 @@ def _check_staff_year(page, staff_year):
                 return "staff_year_not_found:" + staffYear + " available=" + availableYears.join(",");
             }
 
-            // Uncheck all other staff years.
             for (const box of boxes) {
                 if (box !== target && box.checked) {
                     box.checked = false;
@@ -452,7 +448,6 @@ def _check_staff_year(page, staff_year):
                 }
             }
 
-            // Check the target year.
             target.checked = true;
             target.setAttribute("checked", "checked");
             target.dispatchEvent(new Event("input", { bubbles: true }));
@@ -589,7 +584,7 @@ def create_staff_profile_with_browser(full_name, position, bio):
 
             position_result = _fill_metabox_field(page, "Staff Position", position)
 
-            # These should stay blank.
+
             group_result = _clear_metabox_field(page, "Staff Group")
             teaser_result = _clear_metabox_field(page, "Staff Bio Teaser for Story Page")
 
