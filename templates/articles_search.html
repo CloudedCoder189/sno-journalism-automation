@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Article search results for "{{ student_name }}"</h2>
+
+    {% if results %}
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Student</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Uploaded?</th>
+                <th>Action</th>
+            </tr>
+
+            {% for article in results %}
+                <tr>
+                    <td>{{ article.publish_date }}</td>
+                    <td>{{ article.student_name }}</td>
+                    <td>{{ article.title }}</td>
+                    <td>{{ article.category }}</td>
+                    <td>{{ article.uploaded }}</td>
+                    <td><a href="{{ url_for('article_preview', article_id=article.id) }}">Preview</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No matching article found.</p>
+    {% endif %}
+{% endblock %}

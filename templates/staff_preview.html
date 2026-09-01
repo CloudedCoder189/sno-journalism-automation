@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Preview Staff Profile</h2>
+
+    <div class="card">
+        <p><strong>Number:</strong> {{ profile.number }}</p>
+        <p><strong>Short name from PDF:</strong> {{ profile.short_name }}</p>
+        <p><strong>Full name:</strong> {{ profile.full_name }}</p>
+        <p><strong>Position:</strong> {{ profile.position }}</p>
+
+        {% if profile.uploaded|lower == "true" %}
+            <p class="uploaded">Already marked created</p>
+            <p class="muted">{{ profile.sno_link }}</p>
+        {% else %}
+            <p class="not-uploaded">Not created yet</p>
+        {% endif %}
+    </div>
+
+    <h2>{{ profile.full_name }}</h2>
+    <h3>{{ profile.position }}</h3>
+
+    <div class="bio-preview">
+        {% if profile.bio %}
+            <p>{{ profile.bio }}</p>
+        {% else %}
+            <p class="danger">No bio extracted for this person.</p>
+        {% endif %}
+    </div>
+
+    <form method="POST" action="{{ url_for('staff_create', profile_id=profile.id) }}">
+        <button type="submit">
+            {{ "Create Staff Profile Again" if profile.uploaded|lower == "true" else "Create Staff Profile" }}
+        </button>
+    </form>
+    {% if profile.uploaded|lower == "true" %}
+        <p class="muted">Creating again can intentionally produce another SNO draft.</p>
+    {% endif %}
+{% endblock %}

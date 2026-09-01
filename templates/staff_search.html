@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Staff search results for "{{ query }}"</h2>
+
+    {% if profiles %}
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Created?</th>
+                <th>Action</th>
+            </tr>
+
+            {% for profile in profiles %}
+                <tr>
+                    <td>{{ profile.number }}</td>
+                    <td>{{ profile.full_name }}</td>
+                    <td>{{ profile.position }}</td>
+                    <td>{{ profile.uploaded }}</td>
+                    <td><a href="{{ url_for('staff_preview', profile_id=profile.id) }}">Preview</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No matching profiles found.</p>
+    {% endif %}
+{% endblock %}

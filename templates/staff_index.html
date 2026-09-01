@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card">
+        <h2>Upload Staff Bio PDF</h2>
+        <p>This extracts names and bios from a numbered staff bio PDF, then matches positions from <code>sample_data/staff_positions.csv</code>.</p>
+
+        <form method="POST" action="{{ url_for('staff_upload_pdf') }}" enctype="multipart/form-data">
+            <input type="file" name="bio_pdf" accept=".pdf">
+            <button type="submit">Extract Staff Bios</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Search staff</h2>
+        <form method="POST" action="{{ url_for('staff_search') }}">
+            <input type="text" name="query" placeholder="Search name, role, or bio">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <strong>Total profiles</strong><br>
+            {{ profiles|length }}
+        </div>
+        <div class="stat">
+            <strong>Already created</strong><br>
+            {{ created_count }}
+        </div>
+        <div class="stat">
+            <strong>Missing bio</strong><br>
+            {{ missing_bio_count }}
+        </div>
+        <div class="stat">
+            <strong>Default reporter role</strong><br>
+            {{ reporter_count }}
+        </div>
+        <div class="stat">
+            <strong>Export</strong><br>
+            <a href="{{ url_for('staff_export_csv') }}">Download CSV</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Batch Create Staff Profiles</h2>
+        <p>
+            These buttons run browser automation one profile at a time. This may take a while.
+            Profile images are still manual.
+        </p>
+
+        <form method="POST" action="{{ url_for('staff_create_batch') }}" id="batchForm">
+            <p>
+                <button type="submit" name="batch_action" value="selected">
+                    Create Selected Profiles
+                </button>
+
+                <button type="submit" name="batch_action" value="all_not_created">
+                    Create All Not-Created Profiles
+                </button>
+
+                <button type="submit" name="batch_action" value="all_profiles">
+                    Create All Profiles Again
+                </button>
+            </p>
+
+            <p class="muted">
+                Use <strong>Create All Profiles Again</strong> only for testing or rebuilding drafts, because it can create duplicates in SNO.
+            </p>
+
+            <h2>Extracted Staff Profiles</h2>
+
+            <table>
+                <tr>
+                    <th>
+                        Select<br>
+                        <input type="checkbox" id="selectAll">
+                    </th>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Bio preview</th>
+                    <th>Created?</th>
+                    <th>Action</th>
+                </tr>
+
+                {% for profile in profiles %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="profile_ids" value="{{ profile.id }}">
+                        </td>
+                        <td>{{ profile.number }}</td>
+                        <td>
+                            <strong>{{ profile.full_name }}</strong><br>
+                            <span class="muted">{{ profile.short_name }}</span>
+                        </td>
+                        <td>{{ profile.position }}</td>
+                        <td>
+                            {% if profile.bio %}
+                                <div class="bio-preview-small">{{ profile.bio }}</div>
+                            {% else %}
+                                <span class="danger">No bio extracted</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if profile.uploaded|lower == "true" %}
+                                <span class="uploaded">Yes</span><br>
+                                <span class="muted">{{ profile.sno_link }}</span>
+                            {% else %}
+                                <span class="not-uploaded">No</span>
+                            {% endif %}
+                        </td>
+                        <td><a href="{{ url_for('staff_preview', profile_id=profile.id) }}">Preview</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+
+    <script>
+        const selectAllBox = document.getElementById("selectAll");
+
+        if (selectAllBox) {
+            selectAllBox.addEventListener("change", function () {
+                const boxes = document.querySelectorAll("input[name='profile_ids']");
+                boxes.forEach(function (box) {
+                    box.checked = selectAllBox.checked;
+                });
+            });
+        }
+    </script>
+{% endblock %}

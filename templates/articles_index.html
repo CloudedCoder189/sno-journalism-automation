@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card">
+        <h2>Find article by student</h2>
+        <form method="POST" action="{{ url_for('articles_search') }}">
+            <input name="student_name" placeholder="Example: Jordan">
+            <button type="submit">Find Article</button>
+        </form>
+    </div>
+
+    <h2>Today’s Scheduled Article</h2>
+
+    {% if today_articles %}
+        {% for article in today_articles %}
+            <div class="card today-card">
+                <h3>{{ article.title }}</h3>
+                <p><strong>Deck:</strong> {{ article.subheadline }}</p>
+                <p><strong>Date:</strong> {{ article.publish_date }}</p>
+                <p><strong>Student:</strong> {{ article.student_name }}</p>
+                <p><strong>Author:</strong> {{ article.author }}</p>
+                <p><strong>Job title:</strong> {{ article.writer_job_title }}</p>
+                <p><strong>Category:</strong> {{ article.category }}</p>
+
+                {% if article.uploaded|lower == "true" %}
+                    <p class="uploaded">Already uploaded</p>
+                    <p class="muted">{{ article.sno_link }}</p>
+                {% else %}
+                    <p class="not-uploaded">Not uploaded yet</p>
+                {% endif %}
+
+                <p><a href="{{ url_for('article_preview', article_id=article.id) }}">Preview / Upload</a></p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="card">
+            <p>No article is scheduled for today.</p>
+        </div>
+    {% endif %}
+
+    <h2>Upcoming Schedule</h2>
+
+    {% if upcoming_articles %}
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Student</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Uploaded?</th>
+                <th>Action</th>
+            </tr>
+
+            {% for article in upcoming_articles %}
+                <tr>
+                    <td>{{ article.publish_date }}</td>
+                    <td>{{ article.student_name }}</td>
+                    <td>{{ article.title }}</td>
+                    <td>{{ article.category }}</td>
+                    <td>
+                        {% if article.uploaded|lower == "true" %}
+                            <span class="uploaded">Yes</span>
+                        {% else %}
+                            <span class="not-uploaded">No</span>
+                        {% endif %}
+                    </td>
+                    <td><a href="{{ url_for('article_preview', article_id=article.id) }}">Preview</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No upcoming articles found.</p>
+    {% endif %}
+
+    <h2>Full Article Schedule</h2>
+    <p class="muted">This comes from <code>sample_data/publishing_schedule.csv (or your local data copy)</code>.</p>
+
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Student</th>
+            <th>Title</th>
+            <th>Deck</th>
+            <th>Category</th>
+            <th>Uploaded?</th>
+        </tr>
+
+        {% for article in full_schedule %}
+            <tr>
+                <td>{{ article.publish_date }}</td>
+                <td>{{ article.student_name }}</td>
+                <td>{{ article.title }}</td>
+                <td>{{ article.subheadline }}</td>
+                <td>{{ article.category }}</td>
+                <td>{{ article.uploaded }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

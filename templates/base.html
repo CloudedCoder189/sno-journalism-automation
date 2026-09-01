@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Local dashboard for SNO article and staff-profile automation.">
+    <title>SNO Automation Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="page-shell">
+        <div class="topbar">
+            <h1>SNO Automation Dashboard</h1>
+            <nav class="nav" aria-label="Primary navigation">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('articles_index') }}">Articles</a>
+                <a href="{{ url_for('staff_index') }}">Staff Bios</a>
+            </nav>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="flash">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

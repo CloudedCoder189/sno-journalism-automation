@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="home-grid">
+        <section class="card">
+            <h2>Article Publisher</h2>
+            <p>Schedule-based workflow for preparing and creating SNO story drafts.</p>
+            <ul>
+                <li>Today and upcoming publishing schedule</li>
+                <li>Student/article search</li>
+                <li>TXT and DOCX article loading</li>
+                <li>Preview before upload</li>
+                <li>Playwright draft creation with title, deck, author, body and category</li>
+                <li>Dry-run protection and duplicate blocking</li>
+            </ul>
+            <p><a href="{{ url_for('articles_index') }}">Open Article Publisher →</a></p>
+        </section>
+
+        <section class="card">
+            <h2>Staff Bio Publisher</h2>
+            <p>PDF extraction plus browser automation for SNO staff-profile drafts.</p>
+            <ul>
+                <li>Upload and parse numbered staff-bio PDFs</li>
+                <li>Match staff positions</li>
+                <li>Preview and search profiles</li>
+                <li>Bold the first full-name occurrence</li>
+                <li>Fill Staff Position and Staff Year</li>
+                <li>Leave Staff Group and Bio Teaser blank</li>
+                <li>Create selected, not-created, or all profiles in batches</li>
+            </ul>
+            <p><a href="{{ url_for('staff_index') }}">Open Staff Bio Publisher →</a></p>
+        </section>
+    </div>
+
+    <section class="card">
+        <h2>Safe by default</h2>
+        <p>Both publishers start in dry-run mode. Real browser automation only runs after the local environment is configured and the operator has saved an authorized SNO login session.</p>
+    </section>
+{% endblock %}

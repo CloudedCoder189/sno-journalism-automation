@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Preview Article</h2>
+
+    <div class="card">
+        <p><strong>Publish date:</strong> {{ article.publish_date }}</p>
+        <p><strong>Student:</strong> {{ article.student_name }}</p>
+        <p><strong>Author:</strong> {{ article.author }}</p>
+        <p><strong>Writer job title:</strong> {{ article.writer_job_title }}</p>
+        <p><strong>Subheadline/deck:</strong> {{ article.subheadline }}</p>
+        <p><strong>Category:</strong> {{ article.category }}</p>
+        <p><strong>File:</strong> {{ article.article_file }}</p>
+
+        {% if article.uploaded|lower == "true" %}
+            <p class="uploaded">Already uploaded</p>
+            <p class="muted">{{ article.sno_link }}</p>
+        {% else %}
+            <p class="not-uploaded">Not uploaded yet</p>
+        {% endif %}
+    </div>
+
+    <h2>{{ article_title }}</h2>
+    <p><em>{{ article.subheadline }}</em></p>
+
+    <div class="preview">
+        {{ html_content|safe }}
+    </div>
+
+    {% if article.uploaded|lower == "true" %}
+        <p class="danger">Upload button disabled to prevent duplicate SNO posts.</p>
+    {% else %}
+        <form method="POST" action="{{ url_for('article_upload', article_id=article.id) }}">
+            <p><button type="submit">Upload Article to SNO Draft</button></p>
+        </form>
+    {% endif %}
+{% endblock %}
