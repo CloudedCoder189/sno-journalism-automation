@@ -41,9 +41,6 @@ def home():
     return render_template("home.html")
 
 
-# -----------------------------
-# Article routes
-# -----------------------------
 @app.route("/articles")
 def articles_index():
     return render_template(
@@ -122,9 +119,6 @@ def article_upload(article_id):
     return redirect(url_for("article_preview", article_id=article_id))
 
 
-# -----------------------------
-# Staff bio routes
-# -----------------------------
 @app.route("/staff")
 def staff_index():
     profiles = get_profiles()
@@ -197,8 +191,6 @@ def staff_create(profile_id):
         flash("Profile not found.")
         return redirect(url_for("staff_index"))
 
-    # Staff profiles are allowed to be created again.
-    # This is useful for testing because SNO drafts may need to be regenerated.
     result = create_staff_profile(profile)
 
     if result["ok"]:
