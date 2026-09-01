@@ -7,10 +7,8 @@ __pycache__/
 .vscode/
 .DS_Store
 
-# Contains authenticated browser cookies/session data.
 playwright_sno_profile/
 
-# Runtime/private content.
 data/*
 !data/.gitkeep
 uploads/*
@@ -20,5 +18,4 @@ exports/*
 debug/*
 !debug/.gitkeep
 
-# Browser automation may create these if code is customized.
 debug_*.png
